@@ -40,6 +40,15 @@ describe Application do
       expect(response.body).to include('Surfer Rosa')
       expect(response.body).to include('1988')
     end
+
+    it 'returns a link to each album' do
+      response = get('/albums')
+
+      expect(response.status).to eq(200)
+      expect(response.body).to include('<a href="/albums/2">Link</a>')
+      expect(response.body).to include('<a href="/albums/6">Link</a>')
+      expect(response.body).to include('<a href="/albums/9">Link</a>')
+    end
   end
 
   context 'POST ./albums' do
@@ -82,14 +91,54 @@ describe Application do
     end
   end
 
+  # context 'testing GET ./artists' do
+  #   it 'should return the list of artists' do
+  #     response = get('/artists')
+
+  #     expected_response = 'Pixies, ABBA, Taylor Swift, Nina Simone'
+
+  #     expect(response.status).to eq(200)
+  #     expect(response.body).to eq(expected_response)
+  #   end
+  # end
+
   context 'testing GET ./artists' do
-    it 'should return the list of artists' do
+    it 'returns the list of artists' do
       response = get('/artists')
 
-      expected_response = 'Pixies, ABBA, Taylor Swift, Nina Simone'
+      expect(response.status).to eq(200)
+      expect(response.body).to include('Pixies')
+      expect(response.body).to include('Rock')
+      expect(response.body).to include('ABBA')
+      expect(response.body).to include('Pop')
+    end
+
+    it 'returns a link to each artist' do
+      response = get('/artists')
 
       expect(response.status).to eq(200)
-      expect(response.body).to eq(expected_response)
+      expect(response.body).to include('<a href="/artists/2">Link</a>')
+      expect(response.body).to include('<a href="/artists/3">Link</a>')
+    end
+  end
+
+  context 'testing GET /artists/:id' do
+    it 'returns info about artist 1' do
+      response = get('/artists/1')
+
+      expect(response.status).to eq(200)
+      expect(response.body).to include('<h1>Pixies</h1>')
+      expect(response.body).to include('Genre: Rock')
+    end
+  end
+
+  context 'testing GET /artists/:id' do
+    it 'returns info about artist 2' do
+      response = get('/artists/2')
+
+      expect(response.status).to eq(200)
+      expect(response.body).to include('<h1>ABBA</h1>')
+      expect(response.body).to include('Genre: Pop')
     end
   end
 

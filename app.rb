@@ -53,15 +53,30 @@ class Application < Sinatra::Base
     return ''
   end
 
+  # get '/artists' do
+  #   repo = ArtistRepository.new
+  #   artists =  repo.all
+
+  #   response = artists.map do |artist|
+  #     artist.name
+  #   end.join(', ')
+
+  #   return response
+  # end
+
   get '/artists' do
     repo = ArtistRepository.new
-    artists =  repo.all
+    @artists = repo.all
 
-    response = artists.map do |artist|
-      artist.name
-    end.join(', ')
+    return erb(:artists)
+  end
+  
+  get '/artists/:id' do
+    repo = ArtistRepository.new
+    
+    @artist = repo.find(params[:id])
 
-    return response
+    return erb(:artist)
   end
 
   post '/artists' do
