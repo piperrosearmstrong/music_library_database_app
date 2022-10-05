@@ -1,19 +1,15 @@
 <html>
   <head></head>
   <body>
-    <h1>Albums</h1>
-<% albums.each do |album|
-    <div>
-      puts "Title: #{@album.title}"
-      puts "Released: #{@album.release_date}" 
-    </div>
-
-    <div>
-      Title: Surfer Rosa
-      Released: 1988
-    </div>
-
-    <!-- ... -->
+    <h1>Albums</h1>  
+    <p>
+    <% @albums.each do |album| %>
+      Title: <%= album.title %> <br />
+      Released: <%= album.release_year %> <br />
+      <br />     
+      <% end %>
+    </p>
   </body>
 </html>
+
 
