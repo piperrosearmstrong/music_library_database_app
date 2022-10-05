@@ -3,7 +3,7 @@ require 'artist_repository'
 
 def reset_artists_table
   seed_sql = File.read('spec/seeds/artists_seeds.sql')
-  connection = PG.connect({ host: '127.0.0.1', dbname: 'music_library_test' })
+  connection = PG.connect({ host: '127.0.0.1', dbname: 'music_library_app_test' })
   connection.exec(seed_sql)
 end
 
