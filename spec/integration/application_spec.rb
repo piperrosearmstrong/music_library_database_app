@@ -78,8 +78,10 @@ describe Application do
       response = get('/albums/new')
 
       expect(response.status).to eq(200)
-      expect(response.body).to include('<h1>Add an album</h1>')
-      expect(response.body).to include('<form action="/albums" method="POST">')
+      expect(response.body).to include('<form method="POST" action="/albums">')
+      expect(response.body).to include('<input type="text" name="title">')
+      expect(response.body).to include('<input type="text" name="release_year">')
+      expect(response.body).to include('<input type="text" name="artist_id">')
     end
   end
 
@@ -93,7 +95,17 @@ describe Application do
       )
 
       expect(response.status).to eq(200)
-      expect(response.body).to include('<p>Your album has been added!</p>')
+      expect(response.body).to include('<h1>Your album has been added!</h1>')
+    end
+
+    it 'should validate album parameters' do
+      response = post(
+        '/albums',
+        invalid_artist_title: "OK Computer",
+        invalid_info: 123
+      )
+
+      expect(response.status).to eq(400)
     end
   end
 
@@ -137,20 +149,37 @@ describe Application do
     end
   end
 
-  context 'POST ./artists' do
-    it 'should create a new artist' do
+  context 'GET /artists/new' do
+    it 'returns the form page' do
+      response = get('/artists/new')
+
+      expect(response.status).to eq(200)
+      expect(response.body).to include('<form method="POST" action="/artists">')
+      expect(response.body).to include('<input type="text" name="name">')
+      expect(response.body).to include('<input type="text" name="genre">')
+    end
+  end
+
+  context 'testing POST /artists' do
+    it 'returns a success page' do
       response = post(
-        '/artists', 
-        name: 'Wild Nothing', 
-        genre: 'Indie'
+        '/artists',
+          name: 'FKA Twigs', 
+          genre: 'Avant-Pop', 
       )
 
       expect(response.status).to eq(200)
-      expect(response.body).to eq('')
+      expect(response.body).to include('<h1>Your artist has been added!</h1>')
+    end
 
-      response = get('/artists')
+    it 'should validate artist parameters' do
+      response = post(
+        '/artists',
+        invalid_artist_name: "Nina Simone",
+        invalid_info: 123
+      )
 
-      expect(response.body).to include('Wild Nothing')
+      expect(response.status).to eq(400)
     end
   end
 end
@@ -187,3 +216,21 @@ end
   #     expect(response.body).to eq(expected_response)
   #   end
   # end
+
+  #   context 'POST ./artists' do
+#     it 'should create a new artist' do
+#       response = post(
+#         '/artists', 
+#         name: 'Wild Nothing', 
+#         genre: 'Indie'
+#       )
+
+#       expect(response.status).to eq(200)
+#       expect(response.body).to eq('')
+
+#       response = get('/artists')
+
+#       expect(response.body).to include('Wild Nothing')
+#     end
+#   end
+# end
