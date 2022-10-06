@@ -51,24 +51,6 @@ describe Application do
     end
   end
 
-  context 'POST ./albums' do
-    it 'should create a new album' do
-      response = post(
-        '/albums', 
-        title: 'Voyage', 
-        release_year: '2022', 
-        artist_id: '2'
-      )
-
-      expect(response.status).to eq(200)
-      expect(response.body).to eq('')
-
-      response = get('/albums')
-
-      expect(response.body).to include('Voyage')
-    end
-  end
-
   context 'GET /albums/:id' do
     it 'returns info about album 1' do
       response = get('/albums/1')
@@ -91,16 +73,29 @@ describe Application do
     end
   end
 
-  # context 'testing GET ./artists' do
-  #   it 'should return the list of artists' do
-  #     response = get('/artists')
+  context 'GET /albums/new' do
+    it 'returns the form page' do
+      response = get('/albums/new')
 
-  #     expected_response = 'Pixies, ABBA, Taylor Swift, Nina Simone'
+      expect(response.status).to eq(200)
+      expect(response.body).to include('<h1>Add an album</h1>')
+      expect(response.body).to include('<form action="/albums" method="POST">')
+    end
+  end
 
-  #     expect(response.status).to eq(200)
-  #     expect(response.body).to eq(expected_response)
-  #   end
-  # end
+  context 'testing POST /albums' do
+    it 'returns a success page' do
+      response = post(
+        '/albums',
+          title: 'Voyage', 
+          release_year: '2022', 
+          artist_id: '2'
+      )
+
+      expect(response.status).to eq(200)
+      expect(response.body).to include('<p>Your album has been added!</p>')
+    end
+  end
 
   context 'testing GET ./artists' do
     it 'returns the list of artists' do
@@ -159,3 +154,36 @@ describe Application do
     end
   end
 end
+
+# Revised Old Code
+
+# context 'POST ./albums' do
+  #   it 'should create a new album' do
+  #     response = post(
+  #       '/albums', 
+  #       title: 'Voyage', 
+  #       release_year: '2022', 
+  #       artist_id: '2'
+  #     )
+
+  #     expect(response.status).to eq(200)
+  #     expect(response.body).to eq('')
+
+  #     response = get('/albums')
+
+  #     expect(response.body).to include('Voyage')
+  #   end
+  # end
+
+
+
+    # context 'testing GET ./artists' do
+  #   it 'should return the list of artists' do
+  #     response = get('/artists')
+
+  #     expected_response = 'Pixies, ABBA, Taylor Swift, Nina Simone'
+
+  #     expect(response.status).to eq(200)
+  #     expect(response.body).to eq(expected_response)
+  #   end
+  # end
